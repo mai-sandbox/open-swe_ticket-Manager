@@ -15,5 +15,3 @@ This repository contains a LangGraph agent for automatically processing customer
 5. **Acknowledgement Draft** (`draft_ack`)  
    Writes a 1–2 sentence acknowledgement email snippet.
 
-## File Structure
-
