@@ -48,7 +48,8 @@ def classify_ticket(state: State) -> dict:
     """
     
     response = llm.invoke(prompt)
-    category = response.content.strip()
+    content = response.content if isinstance(response.content, str) else str(response.content)
+    category = content.strip()
     
     # Ensure valid category
     valid_categories = ["Billing", "Technical", "General Inquiry"]
@@ -83,7 +84,8 @@ def detect_priority(state: State) -> dict:
     """
     
     response = llm.invoke(prompt)
-    priority = response.content.strip()
+    content = response.content if isinstance(response.content, str) else str(response.content)
+    priority = content.strip()
     
     # Ensure valid priority
     valid_priorities = ["High", "Medium", "Low"]
@@ -114,7 +116,8 @@ def summarize_ticket(state: State) -> dict:
     """
     
     response = llm.invoke(prompt)
-    summary = response.content.strip()
+    content = response.content if isinstance(response.content, str) else str(response.content)
+    summary = content.strip()
     
     return {"summary": summary}
 
@@ -174,7 +177,8 @@ def draft_ack(state: State) -> dict:
     """
     
     response = llm.invoke(prompt)
-    acknowledgement = response.content.strip()
+    content = response.content if isinstance(response.content, str) else str(response.content)
+    acknowledgement = content.strip()
     
     return {"acknowledgement": acknowledgement}
 
@@ -202,4 +206,5 @@ graph = graph_builder.compile()
 
 # Export the compiled graph as required
 compiled_graph = graph
+
 
