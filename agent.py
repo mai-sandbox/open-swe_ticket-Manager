@@ -1,5 +1,6 @@
 from typing import TypedDict
 
+
 from langgraph.graph import StateGraph, START, END
 from langchain.chat_models import init_chat_model
 
@@ -10,6 +11,7 @@ class State(TypedDict):
     summary: str
     email: str
     acknowledgement: str
+
 
 # Initialize the LLM model
 llm = init_chat_model("openai:gpt-4.1")
@@ -348,6 +350,7 @@ class State(TypedDict):
     summary: str
     email: str
     acknowledgement: str
+
 
 
 
