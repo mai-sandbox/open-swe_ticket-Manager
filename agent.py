@@ -122,6 +122,10 @@ graph_builder.add_edge("summarize_ticket", "route_ticket")
 graph_builder.add_edge("route_ticket", "draft_ack")
 graph_builder.add_edge("draft_ack", END)
 
+app = graph_builder.compile()
+
+
+
 
 
 
