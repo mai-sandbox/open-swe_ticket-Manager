@@ -25,6 +25,13 @@ TICKET:
 
 PRIORITY:"""
 
+SUMMARY_PROMPT = """You are a support agent. Summarize the following ticket in one sentence.
+
+TICKET:
+{ticket}
+
+SUMMARY:"""
+
 
 class State(TypedDict):
     messages: Annotated[list, add_messages]
@@ -50,5 +57,15 @@ def detect_priority(state: State) -> dict:
     response = llm.invoke(prompt)
     priority = response.content.strip()
     return {"priority": priority}
+
+
+def summarize_ticket(state: State) -> dict:
+    ticket = state["messages"][0].content
+    llm = ChatOpenAI(model="gpt-4o", temperature=0)
+    prompt = SUMMARY_PROMPT.format(ticket=ticket)
+    response = llm.invoke(prompt)
+    summary = response.content.strip()
+    return {"summary": summary}
+
 
 
