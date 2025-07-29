@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from langchain_core.messages import BaseMessage
+from langchain_core.messages import AIMessage, BaseMessage
 from langchain_openai import ChatOpenAI
 from typing_extensions import TypedDict
 
@@ -31,6 +31,14 @@ TICKET:
 {ticket}
 
 SUMMARY:"""
+
+DRAFT_ACK_PROMPT = """You are a support agent. Draft a 1-2 sentence acknowledgement email snippet.
+Reference the summary of the ticket and the email it was routed to.
+
+SUMMARY: {summary}
+ROUTED TO: {route_to_email}
+
+ACKNOWLEDGEMENT:"""
 
 
 class State(TypedDict):
@@ -86,6 +94,17 @@ def route_ticket(state: State) -> dict:
         route_to_email = "support@company.com"
 
     return {"route_to_email": route_to_email}
+
+
+def draft_ack(state: State) -> dict:
+    summary = state.get("summary")
+    route_to_email = state.get("route_to_email")
+    llm = ChatOpenAI(model="gpt-4o", temperature=0)
+    prompt = DRAFT_ACK_PROMPT.format(summary=summary, route_to_email=route_to_email)
+    response = llm.invoke(prompt)
+    ack = AIMessage(content=response.content.strip())
+    return {"messages": [ack]}
+
 
 
 
