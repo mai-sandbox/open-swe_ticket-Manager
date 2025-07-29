@@ -17,6 +17,14 @@ TICKET:
 
 CLASSIFICATION:"""
 
+PRIORITY_PROMPT = """You are a support agent. Determine the priority of the following ticket based on its content.
+The priority can be Low, Medium, or High.
+
+TICKET:
+{ticket}
+
+PRIORITY:"""
+
 
 class State(TypedDict):
     messages: Annotated[list, add_messages]
@@ -33,5 +41,14 @@ def classify_ticket(state: State) -> dict:
     response = llm.invoke(prompt)
     category = response.content.strip()
     return {"category": category}
+
+
+def detect_priority(state: State) -> dict:
+    ticket = state["messages"][0].content
+    llm = ChatOpenAI(model="gpt-4o", temperature=0)
+    prompt = PRIORITY_PROMPT.format(ticket=ticket)
+    response = llm.invoke(prompt)
+    priority = response.content.strip()
+    return {"priority": priority}
 
 
