@@ -68,4 +68,25 @@ def summarize_ticket(state: State) -> dict:
     return {"summary": summary}
 
 
+def route_ticket(state: State) -> dict:
+    category = state.get("category")
+    priority = state.get("priority")
+
+    if category == "Billing":
+        if priority == "High":
+            route_to_email = "priority-billing@company.com"
+        else:
+            route_to_email = "billing@company.com"
+    elif category == "Technical":
+        if priority == "High":
+            route_to_email = "urgent-tech@company.com"
+        else:
+            route_to_email = "tech@company.com"
+    else:
+        route_to_email = "support@company.com"
+
+    return {"route_to_email": route_to_email}
+
+
+
 
