@@ -4,6 +4,7 @@ from langchain_core.messages import AIMessage, BaseMessage
 from langchain_openai import ChatOpenAI
 from typing_extensions import TypedDict
 
+from langgraph.graph import END, StateGraph, START
 from langgraph.graph.message import add_messages
 
 
@@ -104,6 +105,23 @@ def draft_ack(state: State) -> dict:
     response = llm.invoke(prompt)
     ack = AIMessage(content=response.content.strip())
     return {"messages": [ack]}
+
+
+graph_builder = StateGraph(State)
+
+graph_builder.add_node("classify_ticket", classify_ticket)
+graph_builder.add_node("detect_priority", detect_priority)
+graph_builder.add_node("summarize_ticket", summarize_ticket)
+graph_builder.add_node("route_ticket", route_ticket)
+graph_builder.add_node("draft_ack", draft_ack)
+
+graph_builder.add_edge(START, "classify_ticket")
+graph_builder.add_edge("classify_ticket", "detect_priority")
+graph_builder.add_edge("detect_priority", "summarize_ticket")
+graph_builder.add_edge("summarize_ticket", "route_ticket")
+graph_builder.add_edge("route_ticket", "draft_ack")
+graph_builder.add_edge("draft_ack", END)
+
 
 
 
